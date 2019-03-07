@@ -62,24 +62,16 @@ public class ExportUtil {
         return out.toByteArray();
     }
 
-    public static byte[] exportXlsx(LinkedHashMap<String, List<LinkedHashMap<String, Object>>> tableData) {
+    public static byte[] exportXlsx(Map<String, List<LinkedHashMap<String, Object>>> tableData) {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
 
         try {
             HSSFWorkbook workbook = new HSSFWorkbook();
             // 创建多个sheet
-
-            Iterator<Map.Entry<String, List<LinkedHashMap<String, Object>>>> iterator = tableData.entrySet().iterator();
-            while (iterator.hasNext()) {
-                String sheetName = iterator.next().getKey();
-                List<LinkedHashMap<String, Object>> value = iterator.next().getValue();
-
-//                fillDataToXlsx(workbook.createSheet(sheetName), value);
-                System.out.println(sheetName);
-                System.out.println(value);
+            for (Map.Entry<String, List<LinkedHashMap<String, Object>>> entry : tableData.entrySet()) {
+                fillDataToXlsx(workbook.createSheet(entry.getKey()), entry.getValue());
             }
 
-            fillDataToXlsx(workbook.createSheet("日报表"), tableData.get("日报表"));
             workbook.write(out);
         } catch (IOException e) {
             e.printStackTrace();

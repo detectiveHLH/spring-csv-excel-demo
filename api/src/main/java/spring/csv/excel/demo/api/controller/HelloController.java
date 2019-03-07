@@ -11,9 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * HelloController
@@ -61,8 +59,8 @@ public class HelloController {
         days.add(day);
         for (int i = 0; i < 5; i++) {
             day = new LinkedHashMap<>();
-            day.put("1", "小明");
-            day.put("2", "小王");
+            day.put("1", "小青");
+            day.put("2", "小白");
             days.add(day);
         }
 
@@ -73,8 +71,8 @@ public class HelloController {
         weeks.add(week);
         for (int i = 0; i < 5; i++) {
             week = new LinkedHashMap<>();
-            week.put("1", "小明");
-            week.put("2", "小王");
+            week.put("1", "小刘");
+            week.put("2", "小张");
             weeks.add(week);
         }
 
@@ -87,14 +85,18 @@ public class HelloController {
             month = new LinkedHashMap<>();
             month.put("1", "小明");
             month.put("2", "小王");
-            months.add(week);
+            months.add(month);
         }
 
-        LinkedHashMap<String, List<LinkedHashMap<String, Object>>> tableData = new LinkedHashMap<>();
-        tableData.put("日报表", days);
-        tableData.put("月报表", weeks);
-        tableData.put("周报表", months);
+//        LinkedHashMap<String, List<LinkedHashMap<String, Object>>> tableData = new LinkedHashMap<>();
+//        tableData.put("日报表", days);
+//        tableData.put("月报表", weeks);
+//        tableData.put("周报表", months);
 
+        Map<String, List<LinkedHashMap<String, Object>>> tableData = new HashMap<>();
+        tableData.put("日报表", days);
+        tableData.put("周报表", weeks);
+        tableData.put("月报表", months);
 
         FileCopyUtils.copy(ExportUtil.exportXlsx(tableData), response.getOutputStream());
     }
