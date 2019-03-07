@@ -4,7 +4,6 @@ import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.springframework.stereotype.Component;
 
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
@@ -63,15 +62,24 @@ public class ExportUtil {
         return out.toByteArray();
     }
 
-    public static byte[] exportXlsx(List<LinkedHashMap<String, Object>> day, List<LinkedHashMap<String, Object>> week, List<LinkedHashMap<String, Object>> month) {
+    public static byte[] exportXlsx(LinkedHashMap<String, List<LinkedHashMap<String, Object>>> tableData) {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
 
         try {
             HSSFWorkbook workbook = new HSSFWorkbook();
             // 创建多个sheet
-            fillDataToXlsx(workbook.createSheet("日报表"), day);
-            fillDataToXlsx(workbook.createSheet("周报表"), week);
-            fillDataToXlsx(workbook.createSheet("月报表"), month);
+
+            Iterator<Map.Entry<String, List<LinkedHashMap<String, Object>>>> iterator = tableData.entrySet().iterator();
+            while (iterator.hasNext()) {
+                String sheetName = iterator.next().getKey();
+                List<LinkedHashMap<String, Object>> value = iterator.next().getValue();
+
+//                fillDataToXlsx(workbook.createSheet(sheetName), value);
+                System.out.println(sheetName);
+                System.out.println(value);
+            }
+
+            fillDataToXlsx(workbook.createSheet("日报表"), tableData.get("日报表"));
             workbook.write(out);
         } catch (IOException e) {
             e.printStackTrace();

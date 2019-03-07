@@ -25,7 +25,7 @@ import java.util.List;
 public class HelloController {
 
     @GetMapping("csv")
-    public void test(
+    public void csv(
             HttpServletRequest request,
             HttpServletResponse response
     ) throws IOException {
@@ -43,6 +43,60 @@ public class HelloController {
         bodys.add(body);
         bodys.add(body);
         FileCopyUtils.copy(ExportUtil.exportCSV(header, bodys), response.getOutputStream());
+    }
+
+    @GetMapping("xlsx")
+    public void xlsx(
+            HttpServletRequest request,
+            HttpServletResponse response
+    ) throws IOException {
+        String fileName = this.getFileName(request, "测试数据.xlsx");
+        response.setContentType(MediaType.APPLICATION_OCTET_STREAM.toString());
+        response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\";");
+
+        List<LinkedHashMap<String, Object>> days = new ArrayList<>();
+        LinkedHashMap<String, Object> day = new LinkedHashMap<>();
+        day.put("1", "姓名");
+        day.put("2", "年龄");
+        days.add(day);
+        for (int i = 0; i < 5; i++) {
+            day = new LinkedHashMap<>();
+            day.put("1", "小明");
+            day.put("2", "小王");
+            days.add(day);
+        }
+
+        List<LinkedHashMap<String, Object>> weeks = new ArrayList<>();
+        LinkedHashMap<String, Object> week = new LinkedHashMap<>();
+        week.put("1", "姓名");
+        week.put("2", "年龄");
+        weeks.add(week);
+        for (int i = 0; i < 5; i++) {
+            week = new LinkedHashMap<>();
+            week.put("1", "小明");
+            week.put("2", "小王");
+            weeks.add(week);
+        }
+
+        List<LinkedHashMap<String, Object>> months = new ArrayList<>();
+        LinkedHashMap<String, Object> month = new LinkedHashMap<>();
+        month.put("1", "姓名");
+        month.put("2", "年龄");
+        months.add(month);
+        for (int i = 0; i < 5; i++) {
+            month = new LinkedHashMap<>();
+            month.put("1", "小明");
+            month.put("2", "小王");
+            months.add(week);
+        }
+
+        LinkedHashMap<String, List<LinkedHashMap<String, Object>>> tableData = new LinkedHashMap<>();
+        tableData.put("日报表", days);
+        tableData.put("月报表", weeks);
+        tableData.put("周报表", months);
+
+
+        FileCopyUtils.copy(ExportUtil.exportXlsx(tableData), response.getOutputStream());
     }
 
     /**
