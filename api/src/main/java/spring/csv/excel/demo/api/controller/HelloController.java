@@ -1,6 +1,5 @@
 package spring.csv.excel.demo.api.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,12 +34,14 @@ public class HelloController {
         LinkedHashMap<String, Object> body = new LinkedHashMap<>();
         header.put("1", "姓名");
         header.put("2", "年龄");
-        List<LinkedHashMap<String, Object>> bodys = new ArrayList<>();
+        List<LinkedHashMap<String, Object>> data = new ArrayList<>();
         body.put("1", "小明");
         body.put("2", "小王");
-        bodys.add(body);
-        bodys.add(body);
-        FileCopyUtils.copy(ExportUtil.exportCSV(header, bodys), response.getOutputStream());
+        data.add(header);
+        data.add(body);
+        data.add(body);
+        data.add(body);
+        FileCopyUtils.copy(ExportUtil.exportCSV(data), response.getOutputStream());
     }
 
     @GetMapping("xlsx")
@@ -52,51 +53,22 @@ public class HelloController {
         response.setContentType(MediaType.APPLICATION_OCTET_STREAM.toString());
         response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\";");
 
-        List<LinkedHashMap<String, Object>> days = new ArrayList<>();
-        LinkedHashMap<String, Object> day = new LinkedHashMap<>();
-        day.put("1", "姓名");
-        day.put("2", "年龄");
-        days.add(day);
+        List<LinkedHashMap<String, Object>> datas = new ArrayList<>();
+        LinkedHashMap<String, Object> data = new LinkedHashMap<>();
+        data.put("1", "姓名");
+        data.put("2", "年龄");
+        datas.add(data);
         for (int i = 0; i < 5; i++) {
-            day = new LinkedHashMap<>();
-            day.put("1", "小青");
-            day.put("2", "小白");
-            days.add(day);
+            data = new LinkedHashMap<>();
+            data.put("1", "小青");
+            data.put("2", "小白");
+            datas.add(data);
         }
-
-        List<LinkedHashMap<String, Object>> weeks = new ArrayList<>();
-        LinkedHashMap<String, Object> week = new LinkedHashMap<>();
-        week.put("1", "姓名");
-        week.put("2", "年龄");
-        weeks.add(week);
-        for (int i = 0; i < 5; i++) {
-            week = new LinkedHashMap<>();
-            week.put("1", "小刘");
-            week.put("2", "小张");
-            weeks.add(week);
-        }
-
-        List<LinkedHashMap<String, Object>> months = new ArrayList<>();
-        LinkedHashMap<String, Object> month = new LinkedHashMap<>();
-        month.put("1", "姓名");
-        month.put("2", "年龄");
-        months.add(month);
-        for (int i = 0; i < 5; i++) {
-            month = new LinkedHashMap<>();
-            month.put("1", "小明");
-            month.put("2", "小王");
-            months.add(month);
-        }
-
-//        LinkedHashMap<String, List<LinkedHashMap<String, Object>>> tableData = new LinkedHashMap<>();
-//        tableData.put("日报表", days);
-//        tableData.put("月报表", weeks);
-//        tableData.put("周报表", months);
 
         Map<String, List<LinkedHashMap<String, Object>>> tableData = new HashMap<>();
-        tableData.put("日报表", days);
-        tableData.put("周报表", weeks);
-        tableData.put("月报表", months);
+        tableData.put("日报表", datas);
+        tableData.put("周报表", datas);
+        tableData.put("月报表", datas);
 
         FileCopyUtils.copy(ExportUtil.exportXlsx(tableData), response.getOutputStream());
     }

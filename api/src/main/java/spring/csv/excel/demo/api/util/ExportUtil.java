@@ -26,18 +26,14 @@ public class ExportUtil {
     /**
      * 导出csv文件
      *
-     * @param headers    内容标题
      * @param exportData 要导出的数据集合
      * @return
      */
-    public static byte[] exportCSV(LinkedHashMap<String, Object> headers, List<LinkedHashMap<String, Object>> exportData) {
+    public static byte[] exportCSV(List<LinkedHashMap<String, Object>> exportData) {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         BufferedWriter buffCvsWriter = null;
         try {
             buffCvsWriter = new BufferedWriter(new OutputStreamWriter(out, StandardCharsets.UTF_8));
-            // 将header数据写入表格
-            fillDataToCsv(buffCvsWriter, headers);
-            buffCvsWriter.newLine();
             // 将body数据写入表格
             for (Iterator<LinkedHashMap<String, Object>> iterator = exportData.iterator(); iterator.hasNext(); ) {
                 fillDataToCsv(buffCvsWriter, iterator.next());
